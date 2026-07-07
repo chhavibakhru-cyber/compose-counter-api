@@ -4,9 +4,13 @@ import os
 
 app = FastAPI()
 
-REDIS_HOST = os.getenv("REDIS_HOST", "redis")
-r = redis.Redis(host=REDIS_HOST, port=6379, decode_responses=True)
 
+REDIS_URL = os.getenv("REDIS_URL")
+
+r = redis.from_url(
+    REDIS_URL,
+    decode_responses=True
+)
 @app.post("/hit/{key}")
 def hit(key: str):
     count = r.incr(key)
