@@ -21,13 +21,21 @@ def count(key: str):
     value = r.get(key)
     return {"key": key, "count": int(value) if value else 0}
 
+    
 @app.get("/healthz")
 def health():
     try:
         r.ping()
-        return {"status": "ok", "redis": "up"}
-    except:
-        return {"status": "error", "redis": "down"}
+        return {
+            "status": "ok",
+            "redis": "up"
+        }
+    except Exception as e:
+        return {
+            "status": "error",
+            "redis": "down",
+            "message": str(e)
+        }
 
 from fastapi import Request, HTTPException, Header
 from fastapi.middleware.cors import CORSMiddleware
